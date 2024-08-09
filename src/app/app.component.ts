@@ -29,8 +29,19 @@ export class AppComponent {
   filtroPorTexto: string = '';
 
 
+  normalizeContato(nome: string): string {
+    return nome.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+  } 
+
+  filtrarContatosPorTexto(): Contato[] {
+    if(!this.filtroPorTexto) {
+      return this.contatos;
+    }
+    return this.contatos.filter(contato => this.normalizeContato(contato.nome).includes(this.normalizeContato(this.filtroPorTexto.toLowerCase())));
+  }
+
   filtrarContatosPorLetraInicial(letra: string): Contato[] {
-    return this.contatos.filter(contato => contato.nome.toLowerCase().startsWith(letra.toLowerCase()));
+    return this.filtrarContatosPorTexto().filter(contato => contato.nome.toLowerCase().startsWith(letra.toLowerCase()));
     };
   };
 

@@ -2,11 +2,12 @@
   <app-header></app-header>
 
   <input
+    class="search-input"
     type="search"
     placeholder="Digite para buscar..."
     [(ngModel)] = "filtroPorTexto"
   />
-  
+
   @for (letra of alfabeto; track letra) {
     <app-separator>
       {{ letra }}
