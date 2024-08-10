@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ContainerComponent } from '../../components/container/container.component';
 import { SeparatorComponent } from "../../components/separator/separator.component";
@@ -12,10 +12,14 @@ import { RouterLink } from '@angular/router';
   templateUrl: './formulario-contato.component.html',
   styleUrl: './formulario-contato.component.css'
 })
-export class FormularioContatoComponent {
+export class FormularioContatoComponent implements OnInit{
   contatoForm!: FormGroup;
 
-  constructor() {
+  ngOnInit() {
+    this.inicializarFormulario();
+  };
+
+  inicializarFormulario () {
     this.contatoForm = new FormGroup({
       nome: new FormControl('', [Validators.required]),
       telefone: new FormControl('', Validators.required),
