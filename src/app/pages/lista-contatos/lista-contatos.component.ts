@@ -27,7 +27,9 @@ export class ListaContatosComponent implements OnInit{
   constructor(private contatoService: ContatoService) {};
 
   ngOnInit() {
-    this.contatos = this.contatoService.obterContatos();
+     this.contatoService.obterContatos().subscribe(listaContatos => {
+      this.contatos = listaContatos;
+     });
   };
 
   normalizeContato(nome: string): string {
@@ -38,9 +40,13 @@ export class ListaContatosComponent implements OnInit{
     if(!this.filtroPorTexto) {
       return this.contatos;
     };
-    return this.contatos.filter(contato => this.normalizeContato(contato.nome).includes(this.normalizeContato(this.filtroPorTexto.toLowerCase())));
+    return this.contatos.filter(contato => this.normalizeContato(contato.nome)
+      .includes(this.normalizeContato(this.filtroPorTexto.toLowerCase())));
   };
   filtrarContatosPorLetraInicial(letra: string): Contato[] {
-    return this.filtrarContatosPorTexto().filter(contato => contato.nome.toLowerCase().startsWith(letra.toLowerCase()));
+    return this.filtrarContatosPorTexto()
+      .filter(contato => contato.nome
+        .toLowerCase()
+        .startsWith(letra.toLowerCase()));
     };
 };
