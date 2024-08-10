@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ContainerComponent } from '../../components/container/container.component';
 import { SeparatorComponent } from "../../components/separator/separator.component";
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ContatoService } from '../../services/contato.service';
 
 @Component({
@@ -11,52 +11,55 @@ import { ContatoService } from '../../services/contato.service';
   standalone: true,
   imports: [CommonModule, ContainerComponent, SeparatorComponent, ReactiveFormsModule, RouterLink],
   templateUrl: './formulario-contato.component.html',
-  styleUrl: './formulario-contato.component.css'
+  styleUrls: ['./formulario-contato.component.css']  
 })
 export class FormularioContatoComponent implements OnInit{
+
   contatoForm!: FormGroup;
 
   constructor(
     private contatoService: ContatoService,
     private router: Router,
-  ){};
+    private activatedRoute: ActivatedRoute
+    ) {}
 
   ngOnInit() {
     this.inicializarFormulario();
-  };
+    this.carregarContato();
+  }
 
-  inicializarFormulario () {
+  inicializarFormulario() {
     this.contatoForm = new FormGroup({
-      nome: new FormControl('', [Validators.required]),
+      nome: new FormControl('', Validators.required),
       telefone: new FormControl('', Validators.required),
       email: new FormControl('', [Validators.required, Validators.email]),
-      aniversario: new FormControl('', Validators.required),
-      redes: new FormControl('', Validators.required),
-      observacoes: new FormControl('', Validators.required),
-    });
-  };
-
-  resetarFormularioContato() {
-    this.contatoForm.reset();
-  };
-
-  salvarNovoContato() {
-    if(this.contatoForm.invalid){
-      return;
-    };
-
-    const contatoSalvo = this.contatoForm.value;
-    this.contatoService.salvarContato(contatoSalvo).subscribe(() => {
-      this.limparFormularioEVoltar();
-    });
-  };
-
-  cancelarCadastro() {
-    this.resetarFormularioContato();
-  };
-
-  limparFormularioEVoltar() {
-    this.resetarFormularioContato();
-    this.router.navigateByUrl('/lista-contatos');
+      aniversario: new FormControl(''),
+      redes: new FormControl(''),
+      observacoes: new FormControl('')
+    })
   }
-};
+
+  carregarContato() {
+    const id = this.activatedRoute.snapshot.paramMap.get('id');
+    if (id) {
+      this.contatoService.buscarPorId(parseInt(id)).subscribe((contato) => {
+        this.contatoForm.patchValue(contato)
+      });
+    }
+  }
+
+  salvarContato() {
+    const novoContato = this.contatoForm.value;
+    const id = this.activatedRoute.snapshot.paramMap.get('id');
+    novoContato.id = id ? parseInt(id) : null
+
+    this.contatoService.editarOuSalvarContato(novoContato).subscribe(() => {
+      this.contatoForm.reset();
+      this.router.navigateByUrl('/lista-contatos')
+    });
+  }
+
+  cancelar() {
+    this.contatoForm.reset();
+  }
+}

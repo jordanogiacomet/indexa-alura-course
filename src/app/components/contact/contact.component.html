@@ -5,7 +5,7 @@
         </li>
         <li>{{ telefone }}</li>
         <li>
-            <button class="pencil-button">
+            <button class="pencil-button" [routerLink]="['/formulario', id]">
                 <img src="/pencil-square.png" alt="Botao de editar">
             </button>
             <button class="trash-button" [routerLink]="['/perfil-contato', id]">

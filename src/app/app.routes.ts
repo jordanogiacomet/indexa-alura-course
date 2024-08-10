@@ -5,20 +5,24 @@ import { PerfilContatoComponent } from './pages/perfil-contato/perfil-contato.co
 
 export const routes: Routes = [
     {
-        path: 'formulario',
-        component: FormularioContatoComponent,
+      path: 'formulario',
+      component: FormularioContatoComponent
     },
     {
-        path: 'lista-contatos',
-        component: ListaContatosComponent,
+      path: 'formulario/:id',
+      component: FormularioContatoComponent
     },
     {
-        path: 'perfil-contato/:id',
-        component: PerfilContatoComponent,
+      path: 'lista-contatos',
+      component: ListaContatosComponent
     },
     {
-        path: '',
-        redirectTo: '/lista-contatos',
-        pathMatch: 'full',
+      path: 'perfil-contato/:id',
+      component: PerfilContatoComponent
     },
-];
+    {
+      path: '',
+      redirectTo: '/lista-contatos',
+      pathMatch: 'full'
+    }
+  ];

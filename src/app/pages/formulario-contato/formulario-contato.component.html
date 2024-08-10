@@ -15,7 +15,7 @@
         </section>
     </header>
 
-    <form [formGroup]="contatoForm" (ngSubmit)="salvarNovoContato()">
+    <form [formGroup]="contatoForm" (ngSubmit)="salvarContato()">
         <label for="nome">Nome</label>
         <input formControlName="nome" type="text" id="nome" placeholder="Digite o nome do contato">
         @if (contatoForm.get('nome')?.errors && contatoForm.get('nome')?.touched) {
@@ -58,7 +58,7 @@
         <textarea formControlName="observacoes" id="observacoes" placeholder="Coloque observações nesse espaço.  Exemplo: “Instrutora da academia “Nova Imagem”, amiga da Júlia”."></textarea>
     
         <section class="botoes">
-            <button (click)="cancelarCadastro()" class="botao-cancelar" type="button">Cancelar</button>
+            <button (click)="cancelar()" class="botao-cancelar" type="button">Cancelar</button>
             <button 
                 [disabled]="contatoForm.invalid"
                 [ngClass]="contatoForm.valid ? 'botao-salvar' : 'botao-desabilitado'"

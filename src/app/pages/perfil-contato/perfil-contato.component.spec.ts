@@ -10,7 +10,7 @@ describe('PerfilContatoComponent', () => {
     await TestBed.configureTestingModule({
       imports: [PerfilContatoComponent]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(PerfilContatoComponent);
     component = fixture.componentInstance;
