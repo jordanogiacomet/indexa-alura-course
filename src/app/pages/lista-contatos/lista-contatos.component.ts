@@ -7,7 +7,6 @@ import { ContactComponent } from "../../components/contact/contact.component";
 import { FormsModule } from '@angular/forms'
 import { ContatoService } from '../../services/contato.service';
 
-
 import { RouterLink } from '@angular/router';
 import { Contato } from '../../components/contact/contato';
 

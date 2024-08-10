@@ -39,16 +39,16 @@ export class FormularioContatoComponent implements OnInit{
   resetarFormularioContato() {
     this.contatoForm.reset();
   };
-  
+
   salvarNovoContato() {
     if(this.contatoForm.invalid){
       return;
     };
 
     const contatoSalvo = this.contatoForm.value;
-    this.contatoService.salvarContato(contatoSalvo);
-    
-    this.limparFormularioEVoltar();
+    this.contatoService.salvarContato(contatoSalvo).subscribe(() => {
+      this.limparFormularioEVoltar();
+    });
   };
 
   cancelarCadastro() {
