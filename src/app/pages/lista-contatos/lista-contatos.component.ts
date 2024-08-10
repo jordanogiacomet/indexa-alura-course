@@ -7,13 +7,9 @@ import { ContactComponent } from "../../components/contact/contact.component";
 import { FormsModule } from '@angular/forms'
 import { ContatoService } from '../../services/contato.service';
 
-interface Contato {
-  id: number;
-  nome: string;
-  telefone: string;
-}
 
 import { RouterLink } from '@angular/router';
+import { Contato } from '../../components/contact/contato';
 
 @Component({
   selector: 'app-lista-contatos',
