@@ -170,3 +170,10 @@ header .cabecalho-link {
     color: red;
     margin-bottom: 12px;
   }
+
+  .button-voltar {
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    background: none;
+  }
