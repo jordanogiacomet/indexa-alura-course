@@ -2,14 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ContainerComponent } from '../../components/container/container.component';
 import { SeparatorComponent } from "../../components/separator/separator.component";
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ContatoService } from '../../services/contato.service';
+import { MensagemErroComponent } from "../../components/mensagem-erro/mensagem-erro.component";
 
 @Component({
   selector: 'app-formulario-contato',
   standalone: true,
-  imports: [CommonModule, ContainerComponent, SeparatorComponent, ReactiveFormsModule, RouterLink],
+  imports: [CommonModule, ContainerComponent, SeparatorComponent, ReactiveFormsModule, RouterLink, MensagemErroComponent],
   templateUrl: './formulario-contato.component.html',
   styleUrls: ['./formulario-contato.component.css']  
 })
@@ -21,23 +22,24 @@ export class FormularioContatoComponent implements OnInit{
     private contatoService: ContatoService,
     private router: Router,
     private activatedRoute: ActivatedRoute
-    ) {}
+    ) {};
 
   ngOnInit() {
     this.inicializarFormulario();
     this.carregarContato();
-  }
+  };
 
   inicializarFormulario() {
     this.contatoForm = new FormGroup({
       nome: new FormControl('', Validators.required),
+      avatar: new FormControl('', Validators.required),
       telefone: new FormControl('', Validators.required),
       email: new FormControl('', [Validators.required, Validators.email]),
       aniversario: new FormControl(''),
       redes: new FormControl(''),
       observacoes: new FormControl('')
-    })
-  }
+    });
+  };
 
   carregarContato() {
     const id = this.activatedRoute.snapshot.paramMap.get('id');
@@ -45,8 +47,8 @@ export class FormularioContatoComponent implements OnInit{
       this.contatoService.buscarPorId(parseInt(id)).subscribe((contato) => {
         this.contatoForm.patchValue(contato)
       });
-    }
-  }
+    };
+  };
 
   salvarContato() {
     const novoContato = this.contatoForm.value;
@@ -57,9 +59,39 @@ export class FormularioContatoComponent implements OnInit{
       this.contatoForm.reset();
       this.router.navigateByUrl('/lista-contatos')
     });
+  };
+
+  aoSelecionarArquivo(event: any) {
+    const file: File = event.target.files[0];
+    if(file) {
+      this.lerArquivo(file);
+    };
+  };
+
+  lerArquivo(file: File) {
+    const reader = new FileReader();
+    reader.onload = () => {
+      if(reader.result) {
+        this.contatoForm.get('avatar')?.setValue(reader.result as string);
+      };
+    };
+    reader.readAsDataURL(file);
+  };  
+
+  obterControle(nome: string): FormControl {
+    const control = this.contatoForm.get(nome) as FormControl | null;
+    if(!this.verificaSeExisteControle(control)) {
+      throw new Error('Controle de formulario nao encontrado: ' + nome);
+    };
+    return control!;
+  };
+
+  verificaSeExisteControle(control: AbstractControl<any, any> | null): boolean {
+    return control !== null;
   }
 
   cancelar() {
     this.contatoForm.reset();
-  }
-}
+    this.router.navigateByUrl('/lista-contatos');
+  };
+};
